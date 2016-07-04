@@ -11,4 +11,5 @@ Fetch the data provided by https://xkcd.com/json.html, then provide the data to 
 ### How to develop based on this repo
 Clone this repo   
 `go run Api/main.go`   
-`cd Client/ && npm i && npm start`
+`cd Client/ && npm i && npm start`   
+Now do whatever you want.
