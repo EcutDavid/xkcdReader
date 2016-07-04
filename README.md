@@ -1,6 +1,6 @@
 # xkcdReader
 
-Fetch the data provided by https://xkcd.com/json.html, then provide the data to front end via json.
+Data provided by https://xkcd.com/json.html.
 ![image](https://cloud.githubusercontent.com/assets/10692276/16563967/96d828ca-4237-11e6-9911-1b7d6af8df70.png)
 
 
