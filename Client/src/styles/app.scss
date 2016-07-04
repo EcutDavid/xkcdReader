@@ -59,8 +59,25 @@ body {
   margin: 0;
 }
 
+p {
+  cursor: default;
+}
+
 .App {
-  p {
-    cursor: default;
+  .header {
+    background: skyblue;
+
+    .title {
+      text-align: center;
+      color: #fff;
+      font-weight: bold;
+    }
+  }
+
+  .description {
+    text-align: center;
+  }
+
+  .comic-area {
   }
 }

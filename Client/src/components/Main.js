@@ -27,25 +27,25 @@ class AppComponent extends React.Component {
   render() {
     const { comics } = this.state
     return (
-      <div className="index">
+      <div className='App'>
+        <div className='header'>
+          <h1 className='title'>xkcdReader</h1>
+        </div>
+        <p className='description'>Thanks for <a href='https://xkcd.com'>xkcd.com</a> made the comics</p>
+        <div className='row small-11 small-centered'>
         {
           comics.length ? (
             comics.map((d, key) => (
-              <div key={key}>
+              <div key={key} className='small-12 medium-6 large-4 comic-area columns'>
                 <h3>{d.title}</h3>
                 <img src={d.img} alt={d.alt}/>
-                <a
-                  href={`http://xkcd.com/${d.num}`}
-                  target='_blank'
-                >
-                  View in xkcd.com
-                </a>
               </div>
             ))
           ) : (
-            <p className="button">Data fetching</p>
+            <p className='indicator'>Loading comics</p>
           )
         }
+        </div>
       </div>
     )
   }

@@ -39,19 +39,19 @@ func main() {
 			if err := json.NewDecoder(res.Body).Decode(&newComic); err == nil {
 				newestComic = newComic
 				comicInfoMap[newestComic.Number] = newestComic
-				for i := 1; i < 51; i++ {
+				for i := 1; i < 121; i++ {
 					url := "http://xkcd.com/" + strconv.Itoa(newComic.Number-i) + "/info.0.json"
 					go fetch(url, ch)
 				}
-				for i := 1; i < 51; i++ {
+				for i := 1; i < 121; i++ {
 					newComic := <-ch
 					comicInfoMap[newComic.Number] = newComic
 				}
-				for i := 51; i < 101; i++ {
+				for i := 121; i < 241; i++ {
 					url := "http://xkcd.com/" + strconv.Itoa(newComic.Number-i) + "/info.0.json"
 					go fetch(url, ch)
 				}
-				for i := 51; i < 101; i++ {
+				for i := 121; i < 241; i++ {
 					newComic := <-ch
 					comicInfoMap[newComic.Number] = newComic
 				}
