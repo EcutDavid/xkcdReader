@@ -17,6 +17,7 @@ type comicInfo struct {
 }
 
 var comicInfoMap = make(map[int]comicInfo)
+var newestComic comicInfo
 
 func fetch(url string, ch chan<- comicInfo) {
 	if res, err := http.Get(url); err == nil {
@@ -36,7 +37,8 @@ func main() {
 		if res.StatusCode == http.StatusOK {
 			newComic := comicInfo{}
 			if err := json.NewDecoder(res.Body).Decode(&newComic); err == nil {
-				comicInfoMap[newComic.Number] = newComic
+				newestComic = newComic
+				comicInfoMap[newestComic.Number] = newestComic
 				for i := 1; i < 51; i++ {
 					url := "http://xkcd.com/" + strconv.Itoa(newComic.Number-i) + "/info.0.json"
 					go fetch(url, ch)
@@ -66,11 +68,24 @@ func handler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Access-Control-Allow-Headers",
 		"Origin, X-Requested-With, Content-Type, Accept")
 
-	method := r.Method
 	var encoder = json.NewEncoder(w)
-	if strings.Index(r.URL.Path, "/books") == 0 {
-		if r.URL.Path == "/books" && method == "GET" {
-			encoder.Encode(comicInfoMap)
+	if r.URL.Path == "/" {
+		encoder.Encode(newestComic)
+	} else {
+		res := strings.Split(r.URL.Path, "/")
+		path, err := strconv.Atoi(res[1])
+		if err != nil {
+			return
+		}
+		if path < 11 {
+			number := path
+			fmt.Println(number)
+			newComicInfoSlice := []comicInfo{}
+			for i := 0; i < 10; i++ {
+				index := newestComic.Number - i - 10*number
+				newComicInfoSlice = append(newComicInfoSlice, comicInfoMap[index])
+			}
+			encoder.Encode(newComicInfoSlice)
 		}
 	}
 }
