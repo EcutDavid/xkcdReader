@@ -9,7 +9,12 @@ import 'styles/app.scss'
 class AppComponent extends React.Component {
   constructor() {
     super()
-    this.state = { comics: [], comicIndex: 0}
+    this.state = {
+      comics: [],
+      comicIndex: 0,
+      loading: false,
+      searchResult: []
+    }
   }
 
   fetchComics(index, incComicIndex) {
@@ -45,6 +50,28 @@ class AppComponent extends React.Component {
     }
   }
 
+  onSearch(text) {
+    if (text === '') {
+      return
+    }
+    this.setState({ loading: true })
+    request
+      .get(`${API_ROOT}search/${text}`)
+      .end((err, res) => {
+        this.setState({ loading: false })
+        if (!err) {
+          let newComics = JSON.parse(res.text)
+          newComics = newComics.map(d => {
+            d.isSearchRes = true
+            return d
+          })
+          this.setState({ searchResult: newComics })
+        } else {
+          console.error(err)
+        }
+      })
+  }
+
   componentWillMount() {
     this.fetchComics(0)
     setInterval(() => {
@@ -53,20 +80,24 @@ class AppComponent extends React.Component {
   }
 
   render() {
-    const { comics } = this.state
+    const { comics, loading, searchResult } = this.state
     return (
       <div className='App'>
         <div className='header'>
           <h1 className='title'>xkcdReader</h1>
         </div>
         <p className='description'>Thanks for <a href='https://xkcd.com'>xkcd.com</a> made the comics</p>
-        <SearchBar />
+        <SearchBar loading={loading} onSearch={text => this.onSearch(text)}/>
         <div className='row small-11 small-centered'>
         {
-          comics.map((d, key) => (
-            <div key={key} className='small-12 medium-6 large-4 comic-area columns'>
+          searchResult.concat(comics).map((d, key) => (
+            <div
+              className='small-12 medium-6 large-4 comic-area columns'
+              key={key}
+            >
               <h3>{d.title}</h3>
-              <img src={d.img} alt={d.alt}/>
+              { d.isSearchRes && <p>Came from search</p> }
+              <img src={d.img} alt={d.alt} title={d.alt} />
             </div>
           ))
         }
