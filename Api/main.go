@@ -31,7 +31,7 @@ func fetch(url string, ch chan<- comicInfo) {
 	}
 }
 
-func main() {
+func init() {
 	ch := make(chan comicInfo)
 	if res, err := http.Get("http://xkcd.com/info.0.json"); err == nil {
 		if res.StatusCode == http.StatusOK {
@@ -39,25 +39,24 @@ func main() {
 			if err := json.NewDecoder(res.Body).Decode(&newComic); err == nil {
 				newestComic = newComic
 				comicInfoMap[newestComic.Number] = newestComic
-				for i := 1; i < 121; i++ {
-					url := "http://xkcd.com/" + strconv.Itoa(newComic.Number-i) + "/info.0.json"
-					go fetch(url, ch)
-				}
-				for i := 1; i < 121; i++ {
-					newComic := <-ch
-					comicInfoMap[newComic.Number] = newComic
-				}
-				for i := 121; i < 241; i++ {
-					url := "http://xkcd.com/" + strconv.Itoa(newComic.Number-i) + "/info.0.json"
-					go fetch(url, ch)
-				}
-				for i := 121; i < 241; i++ {
-					newComic := <-ch
-					comicInfoMap[newComic.Number] = newComic
+				for j := 0; j < 10; j++ {
+					addtion := 100 * j
+					for i := addtion + 1; i < addtion+101; i++ {
+						indexStr := strconv.Itoa(newComic.Number - i)
+						url := "http://xkcd.com/" + indexStr + "/info.0.json"
+						go fetch(url, ch)
+					}
+					for i := addtion + 1; i < addtion+101; i++ {
+						newComic := <-ch
+						comicInfoMap[newComic.Number] = newComic
+					}
 				}
 			}
 		}
 	}
+}
+
+func main() {
 	http.HandleFunc("/", handler)
 	log.Fatal(http.ListenAndServe(":9020", nil))
 }
@@ -73,13 +72,13 @@ func handler(w http.ResponseWriter, r *http.Request) {
 		encoder.Encode(newestComic)
 	} else {
 		res := strings.Split(r.URL.Path, "/")
+		r.Body.Close()
 		path, err := strconv.Atoi(res[1])
 		if err != nil {
 			return
 		}
-		if path < 11 {
+		if path < 100 {
 			number := path
-			fmt.Println(number)
 			newComicInfoSlice := []comicInfo{}
 			for i := 0; i < 10; i++ {
 				index := newestComic.Number - i - 10*number
