@@ -1,7 +1,7 @@
 # xkcdReader
 
-Data provided by https://xkcd.com/json.html.
-![image](https://cloud.githubusercontent.com/assets/10692276/16563967/96d828ca-4237-11e6-9911-1b7d6af8df70.png)
+Got the data from https://xkcd.com/json.html.
+![image](https://cloud.githubusercontent.com/assets/10692276/16587760/bce8a7c0-42fe-11e6-9154-b67909e30284.png)
 
 
 ### Why you need a Golang data API.
