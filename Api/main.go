@@ -75,7 +75,7 @@ func handler(w http.ResponseWriter, r *http.Request) {
 			newComicInfoSlice := []comicInfo{}
 			counter := 0
 			for _, value := range comicInfoMap {
-				if strings.Index(value.Title, res[2]) != -1 {
+				if strings.Index(strings.ToLower(value.Title), strings.ToLower(res[2])) != -1 {
 					newComicInfoSlice = append(newComicInfoSlice, value)
 					counter++
 					if counter > 5 {

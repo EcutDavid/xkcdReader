@@ -3,6 +3,14 @@ import React from 'react'
 import 'styles/searchBar.scss'
 
 export default class SearchBar extends React.Component {
+  onKeyDown(e) {
+    const { onSearch } = this.props
+
+    if(e.keyCode === 13) {
+      onSearch(this.refs.textBox.value)
+    }
+  }
+
   render() {
     const { loading, onSearch } = this.props
     return (
@@ -12,6 +20,7 @@ export default class SearchBar extends React.Component {
           type='text'
           placeholder='Part of the comic title'
           ref='textBox'
+          onKeyDown={(e) => this.onKeyDown(e)}
         />
         <button
           className='button'
