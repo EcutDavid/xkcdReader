@@ -1,0 +1,15 @@
+.SearchBar {
+  input {
+    display: inline-block;
+  }
+  button {
+    border-radius: 4px;
+    display: block;
+    margin: 10px auto;
+    padding: 4px;
+
+    i {
+      font-size: 1.9em;
+    }
+  }
+}

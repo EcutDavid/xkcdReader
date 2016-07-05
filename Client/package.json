@@ -54,6 +54,7 @@
     "core-js": "^2.0.0",
     "css-loader": "^0.23.0",
     "file-loader": "^0.8.4",
+    "font-awesome": "^4.6.3",
     "glob": "^7.0.0",
     "isparta-instrumenter-loader": "^1.0.0",
     "minimist": "^1.2.0",

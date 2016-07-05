@@ -3,6 +3,7 @@ import request from 'superagent'
 import 'normalize.css/normalize.css'
 
 import { API_ROOT } from '../config/apiUrl'
+import SearchBar from './SearchBar'
 import 'styles/app.scss'
 
 class AppComponent extends React.Component {
@@ -59,6 +60,7 @@ class AppComponent extends React.Component {
           <h1 className='title'>xkcdReader</h1>
         </div>
         <p className='description'>Thanks for <a href='https://xkcd.com'>xkcd.com</a> made the comics</p>
+        <SearchBar />
         <div className='row small-11 small-centered'>
         {
           comics.map((d, key) => (
