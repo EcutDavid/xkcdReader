@@ -39,7 +39,7 @@ func init() {
 			if err := json.NewDecoder(res.Body).Decode(&newComic); err == nil {
 				newestComic = newComic
 				comicInfoMap[newestComic.Number] = newestComic
-				for j := 0; j < 10; j++ {
+				for j := 0; j < 9; j++ {
 					addtion := 100 * j
 					for i := addtion + 1; i < addtion+101; i++ {
 						indexStr := strconv.Itoa(newComic.Number - i)
@@ -58,7 +58,7 @@ func init() {
 
 func main() {
 	http.HandleFunc("/", handler)
-	log.Fatal(http.ListenAndServe(":9020", nil))
+	log.Fatal(http.ListenAndServe(":9021", nil))
 }
 
 func handler(w http.ResponseWriter, r *http.Request) {
@@ -68,6 +68,26 @@ func handler(w http.ResponseWriter, r *http.Request) {
 		"Origin, X-Requested-With, Content-Type, Accept")
 
 	var encoder = json.NewEncoder(w)
+	if strings.Index(r.URL.Path, "/search") != -1 {
+		res := strings.Split(r.URL.Path, "/")
+		r.Body.Close()
+		if len(res) == 3 && res[2] != "" {
+			newComicInfoSlice := []comicInfo{}
+			counter := 0
+			for _, value := range comicInfoMap {
+				if strings.Index(value.Title, res[2]) != -1 {
+					newComicInfoSlice = append(newComicInfoSlice, value)
+					counter++
+					if counter > 5 {
+						break
+					}
+				}
+			}
+			encoder.Encode(newComicInfoSlice)
+		}
+		return
+	}
+
 	if r.URL.Path == "/" {
 		encoder.Encode(newestComic)
 	} else {
