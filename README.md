@@ -16,4 +16,4 @@ Clone this repo
 `cd Client/ && npm i && npm start`   
 Now do whatever you want.
 
-Data from https://xkcd.com/json.html.
+Data from: https://xkcd.com/json.html.
